@@ -4,17 +4,25 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProposalDetail from "./components/ProposalDetail";
 import ProposalList from "./components/ProposalList";
 
+import { Main, Layout } from "@aragon/ui";
+
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route path="/proposal/:ipfsHash">
-          <ProposalDetail />
-        </Route>
-        <Route path="/">
-          <ProposalList />
-        </Route>
-      </Switch>
+      <Main>
+        <Switch>
+          <Route path="/proposal/:ipfsHash">
+            <Layout>
+              <ProposalDetail />
+            </Layout>
+          </Route>
+          <Route path="/">
+            <Layout>
+              <ProposalList />
+            </Layout>
+          </Route>
+        </Switch>
+      </Main>
     </Router>
   );
 }
