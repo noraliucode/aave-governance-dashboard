@@ -13,7 +13,7 @@ import { useOnChain } from "../hooks";
 export default function ProposalList(props: ProposalPropType) {
   const { selected } = props;
   const history = useHistory();
-  const onChain = useOnChain();
+  const { onChainData, offChainData } = useOnChain();
 
   const goToDetail = useCallback(
     (ipfsHash: string) => {
@@ -25,11 +25,7 @@ export default function ProposalList(props: ProposalPropType) {
   return (
     <DataView
       fields={["Title", "currentYesVote", "status", "ProposalState"]}
-      entries={
-        selected === selectedType.offChain
-          ? [{ title: 1, forVotes: 1 }]
-          : onChain
-      }
+      entries={selected === selectedType.offChain ? offChainData : onChainData}
       renderEntry={({
         title,
         againstVotes,

@@ -4,24 +4,28 @@ import GovernanceV2Helper_ABI from "../constants/abi/GovernanceV2Helper_ABI";
 import { aaveGovernanceV2, governanceV2Helper } from "../constants/contracts";
 import { ProposalType } from "../types.ts";
 import { get, parseIpfsHash } from "../utils";
+import { gql, request } from "graphql-request";
 
 export const useOnChain = () => {
   const [onChainData, setOnChainData] = useState<any[]>([]);
+  const [offChainData, setOffChainData] = useState<any[]>([]);
 
   useEffect(() => {
     const _fetchData = async () => {
-      const data = await fetchData();
-      setOnChainData(data);
+      const offChain = await fetchOffChainData();
+      const onChain = await fetchOnChainData();
+      setOnChainData(onChain);
+      setOffChainData(offChain.proposals);
     };
     _fetchData();
   }, []);
 
   console.log("on-chain data", onChainData);
 
-  return onChainData;
+  return { onChainData, offChainData };
 };
 
-const fetchData = async () => {
+const fetchOnChainData = async () => {
   // Use the mainnet
   const network = "homestead";
 
@@ -49,11 +53,6 @@ const fetchData = async () => {
     const cid = parseIpfsHash(item.ipfsHash);
     console.log("cid :", cid);
     let proposalString = await get(cid);
-
-    proposalString = proposalString.substring(
-      5,
-      proposalString.split("").length - 3
-    );
     let proposal: ProposalType = JSON.parse(proposalString);
     array.unshift({
       ...proposal,
@@ -64,4 +63,34 @@ const fetchData = async () => {
     });
   }
   return array;
+};
+
+export const fetchOffChainData = async () => {
+  const q = gql`
+    query Proposals {
+      proposals(
+        first: 100
+        skip: 0
+        where: { space_in: ["aave.eth"] }
+        orderBy: "created"
+        orderDirection: desc
+      ) {
+        id
+        title
+        body
+        choices
+        start
+        end
+        snapshot
+        state
+        author
+        space {
+          id
+          name
+        }
+      }
+    }
+  `;
+  const offChainData = await request("https://hub.snapshot.org/graphql", q);
+  return offChainData;
 };
