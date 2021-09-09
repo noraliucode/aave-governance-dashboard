@@ -7,8 +7,13 @@ const ipfs = create({
 });
 
 export async function get(cid: string) {
-  const getFile = await ipfs.object.get(cid);
-  return Buffer.from(getFile.Data).toString();
+  const catFile = await ipfs.cat(cid);
+  const buffers = [];
+  for await (const item of catFile) {
+    buffers.push(Buffer.from(item));
+  }
+  const file = Buffer.concat(buffers);
+  return file.toString();
 }
 
 export function parseIpfsHash(ipfsHash: string) {
