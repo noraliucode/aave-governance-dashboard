@@ -27,7 +27,7 @@ function App() {
           </Route>
           <Route path="/">
             <Layout>
-              <ProposalList />
+              <ProposalList selected={selected} />
             </Layout>
           </Route>
         </Switch>
