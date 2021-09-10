@@ -14,6 +14,7 @@ export type ProposalType = {
   proposalState: number;
   basename: string;
   status: string;
+  ipfsHash: string;
 };
 
 export enum ProposalState {

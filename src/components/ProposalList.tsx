@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 // @ts-ignore
-import { DataView, IdentityBadge } from "@aragon/ui";
+import { DataView, IdentityBadge, Button } from "@aragon/ui";
 import {
   ProposalPropType,
   ProposalType,
@@ -24,7 +24,7 @@ export default function ProposalList(props: ProposalPropType) {
 
   return (
     <DataView
-      fields={["Title", "currentYesVote", "status", "ProposalState"]}
+      fields={["Title", "currentYesVote", "status", "ProposalState", ""]}
       entries={selected === selectedType.offChain ? offChainData : onChainData}
       renderEntry={({
         title,
@@ -32,9 +32,10 @@ export default function ProposalList(props: ProposalPropType) {
         forVotes,
         proposalState,
         status,
+        ipfsHash,
       }: ProposalType) => {
         return [
-          <IdentityBadge entity={title} />,
+          <Button label={title} onClick={() => goToDetail(ipfsHash)} />,
           <div>{forVotes}</div>,
           <div>{status}</div>,
           <div>{ProposalState[proposalState]}</div>,

@@ -60,6 +60,7 @@ const fetchOnChainData = async () => {
       againstVotes: item.againstVotes,
       proposalState: item.proposalState,
       title: `${proposal.basename}: ${proposal.title}`,
+      ipfsHash: item.ipfsHash,
     });
   }
   return array;
