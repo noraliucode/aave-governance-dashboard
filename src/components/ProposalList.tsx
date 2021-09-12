@@ -3,19 +3,19 @@ import { useHistory } from "react-router-dom";
 // @ts-ignore
 import { DataView, IdentityBadge, Button } from "@aragon/ui";
 import {
-  ProposalPropType,
+  ProposalListPropType,
   ProposalType,
   selectedType,
   ProposalState,
 } from "../types.ts";
 
-export default function ProposalList(props: ProposalPropType) {
+export default function ProposalList(props: ProposalListPropType) {
   const { selected, proposalList } = props;
   const history = useHistory();
 
   const goToDetail = useCallback(
-    (ipfsHash: string) => {
-      history.push(`/proposal/${ipfsHash}`);
+    (id: number | string) => {
+      history.push(`/proposal/${id}`);
     },
     [history]
   );
@@ -31,6 +31,7 @@ export default function ProposalList(props: ProposalPropType) {
         proposalState,
         status,
         ipfsHash,
+        id,
       }: ProposalType) => {
         return selected === selectedType.offChain
           ? [
@@ -40,7 +41,7 @@ export default function ProposalList(props: ProposalPropType) {
               <div>{ProposalState[proposalState]}</div>,
             ]
           : [
-              <Button label={title} onClick={() => goToDetail(ipfsHash)} />,
+              <Button label={title} onClick={() => goToDetail(id)} />,
               <div>{forVotes}</div>,
               <div>{status}</div>,
               <div>{ProposalState[proposalState]}</div>,

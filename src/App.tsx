@@ -9,7 +9,6 @@ import { useProposalList } from "./hooks";
 
 function App() {
   const [selected, setSelected] = useState(0);
-  const [id, setId] = useState(0);
   const proposalList = useProposalList(selected);
 
   return (
@@ -23,7 +22,7 @@ function App() {
           onChange={setSelected}
         />
         <Switch>
-          <Route path="/proposal/:ipfsHash">
+          <Route path="/proposal/:id">
             <Layout>
               <ProposalDetail />
             </Layout>
