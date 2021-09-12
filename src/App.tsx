@@ -16,11 +16,6 @@ function App() {
       <Main>
         <Header primary={"Aave Governance Dashboard"} />
 
-        <Tabs
-          items={["On-Chain", "Off-Chain"]}
-          selected={selected}
-          onChange={setSelected}
-        />
         <Switch>
           <Route path="/proposal/:id">
             <Layout>
@@ -28,6 +23,11 @@ function App() {
             </Layout>
           </Route>
           <Route path="/">
+            <Tabs
+              items={["On-Chain", "Off-Chain"]}
+              selected={selected}
+              onChange={setSelected}
+            />
             <Layout>
               <ProposalList proposalList={proposalList} selected={selected} />
             </Layout>
