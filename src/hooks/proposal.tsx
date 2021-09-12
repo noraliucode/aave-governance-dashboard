@@ -75,7 +75,9 @@ const fetchOnChainData = async () => {
       forVotes: data[i].forVotes.toString(),
       againstVotes: data[i].againstVotes,
       proposalState: data[i].proposalState,
-      title: `${proposal.basename}: ${proposal.title}`,
+      title: proposal.basename
+        ? `${proposal.basename}: ${proposal.title}`
+        : proposal.title,
       ipfsHash: data[i].ipfsHash,
       id: i,
     });
