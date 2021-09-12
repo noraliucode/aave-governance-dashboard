@@ -28,6 +28,15 @@ export default function ProposalList(props: ProposalListPropType) {
 
   return (
     <DataView
+      emptyState={{
+        default: {
+          displayLoader: true,
+          title: "Loading...",
+          subtitle: null,
+          illustration: <img src="empty-state-illustration-blue.png" alt="" />,
+          clearLabel: null,
+        },
+      }}
       fields={getField()}
       entries={proposalList}
       renderEntry={({
