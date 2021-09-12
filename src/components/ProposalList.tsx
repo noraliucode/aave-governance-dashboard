@@ -8,6 +8,7 @@ import {
   selectedType,
   ProposalState,
 } from "../types.ts";
+import BigNumber from "bignumber.js";
 
 export default function ProposalList(props: ProposalListPropType) {
   const { selected, proposalList } = props;
@@ -48,7 +49,7 @@ export default function ProposalList(props: ProposalListPropType) {
             ]
           : [
               <Button label={title} onClick={() => goToDetail(id)} />,
-              <div>{forVotes}</div>,
+              <div>{new BigNumber(forVotes).shiftedBy(-18).toFixed(2)}</div>,
               <div>{ProposalState[proposalState]}</div>,
             ];
       }}
