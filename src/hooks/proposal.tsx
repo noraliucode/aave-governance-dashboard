@@ -13,6 +13,7 @@ const network = "homestead";
 // Each is optional, and if you omit it the default
 // API key for that service will be used.
 const provider = ethers.getDefaultProvider(network, {
+  // Old API Key that has been pushed before.
   infura: "83b98a98c5ca4761ac26ad2e8210df97",
 });
 
@@ -35,8 +36,6 @@ export const useProposalList = (selected: number) => {
     };
     _fetchData();
   }, []);
-
-  console.log("on-chain data", onChainData);
 
   return selected === selectedType.offChain ? offChainData : onChainData;
 };
@@ -69,7 +68,6 @@ const fetchOnChainData = async () => {
   const array = [] as any;
   for (let i = 0; i < data.length; i++) {
     const cid = parseIpfsHash(data[i].ipfsHash);
-    console.log("cid :", cid);
     let proposalString = await get(cid);
     let proposal: ProposalType = JSON.parse(proposalString);
     array.push({
