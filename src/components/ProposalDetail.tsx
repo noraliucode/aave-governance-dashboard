@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 // @ts-ignore
-import { BackButton, Header, Bar } from "@aragon/ui";
+import { BackButton, Header, Bar, Main, SyncIndicator } from "@aragon/ui";
 import { useProposal } from "../hooks";
 // @ts-ignore
 import marked from "marked";
@@ -11,6 +11,10 @@ export default function ProposalDetail() {
   const history = useHistory();
   const proposal = useProposal(id);
   const { title, description, body } = proposal;
+
+  if (!title) {
+    return <SyncIndicator style={{ width: 200 }} />;
+  }
 
   return (
     <div>
