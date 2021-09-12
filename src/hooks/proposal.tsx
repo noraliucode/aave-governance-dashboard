@@ -41,18 +41,20 @@ export const useProposalList = (selected: number) => {
   return selected === selectedType.offChain ? offChainData : onChainData;
 };
 
-export const useProposal = (id: string | number) => {
+export const useProposal = (id: string) => {
   const [data, setData] = useState<ProposalType>({} as any);
-
   useEffect(() => {
     const _fetchData = async () => {
-      const proposal = await fetchProposal(id);
+      let proposal;
+      if (Number.isNaN(Number(id))) {
+        proposal = await fetchOffChainProposal(id);
+      } else {
+        proposal = await fetchOnChainProposal(id);
+      }
       setData(proposal);
     };
     _fetchData();
   }, []);
-
-  console.log("on-chain data", data);
 
   return data;
 };
@@ -113,7 +115,7 @@ export const fetchOffChainData = async () => {
   return offChainData;
 };
 
-const fetchProposal = async (id: string | number) => {
+const fetchOnChainProposal = async (id: string | number) => {
   const data = await governanceV2HelperContract.getProposal(
     id,
     aaveGovernanceV2
@@ -127,31 +129,33 @@ const fetchProposal = async (id: string | number) => {
 
 export const fetchOffChainProposal = async (id: string) => {
   const q = gql`
-  query {
-    proposal(id:${id}) {
-      id
-      title
-      body
-      choices
-      start
-      end
-      snapshot
-      state
-      author
-      created
-      plugins
-      network
-      strategies {
-        name
-        params
-      }
-      space {
+    query ($id: String!) {
+      proposal(id: $id) {
         id
-        name
+        title
+        body
+        choices
+        start
+        end
+        snapshot
+        state
+        author
+        created
+        plugins
+        network
+        strategies {
+          name
+          params
+        }
+        space {
+          id
+          name
+        }
       }
     }
-  }
   `;
-  const offChainData = await request("https://hub.snapshot.org/graphql", q);
-  return offChainData;
+  const offChainData = await request("https://hub.snapshot.org/graphql", q, {
+    id,
+  });
+  return offChainData.proposal;
 };

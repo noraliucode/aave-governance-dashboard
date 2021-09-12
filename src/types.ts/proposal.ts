@@ -21,6 +21,7 @@ export type ProposalType = {
   author: string;
   state: string;
   end: number;
+  body: string;
 };
 
 export enum ProposalState {

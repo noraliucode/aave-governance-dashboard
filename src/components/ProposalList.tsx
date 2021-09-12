@@ -22,7 +22,7 @@ export default function ProposalList(props: ProposalListPropType) {
 
   const getField = () =>
     selected === selectedType.offChain
-      ? ["Title", "Arthur", "State", "End Date"]
+      ? ["Title", "Arthur", "State"]
       : ["Title", "Current YesVote", "ProposalState"];
 
   return (
@@ -42,10 +42,9 @@ export default function ProposalList(props: ProposalListPropType) {
       }: ProposalType) => {
         return selected === selectedType.offChain
           ? [
-              <Button label={title} onClick={() => goToDetail(ipfsHash)} />,
+              <Button label={title} onClick={() => goToDetail(id)} />,
               <div>{author}</div>,
               <div>{state}</div>,
-              <div>{end}</div>,
             ]
           : [
               <Button label={title} onClick={() => goToDetail(id)} />,

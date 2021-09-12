@@ -10,7 +10,7 @@ export default function ProposalDetail() {
   const { id } = useParams() as any;
   const history = useHistory();
   const proposal = useProposal(id);
-  const { title, description } = proposal;
+  const { title, description, body } = proposal;
 
   return (
     <div>
@@ -19,7 +19,11 @@ export default function ProposalDetail() {
       />
 
       <Header primary={title} />
-      <div dangerouslySetInnerHTML={{ __html: marked(description || "") }} />
+      <div
+        dangerouslySetInnerHTML={{
+          __html: marked(description || body || ""),
+        }}
+      />
     </div>
   );
 }
