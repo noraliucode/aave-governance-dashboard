@@ -27,3 +27,7 @@
 ```shell
 npm install && npm start
 ```
+
+## Screenshot
+
+![Imgur](https://i.imgur.com/WbXbqmG.png)
