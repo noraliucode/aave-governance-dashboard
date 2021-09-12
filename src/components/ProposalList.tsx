@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 // @ts-ignore
-import { DataView, IdentityBadge, Button } from "@aragon/ui";
+import { DataView, Button } from "@aragon/ui";
 import {
   ProposalListPropType,
   ProposalType,
@@ -41,14 +41,11 @@ export default function ProposalList(props: ProposalListPropType) {
       entries={proposalList}
       renderEntry={({
         title,
-        againstVotes,
         forVotes,
         proposalState,
-        ipfsHash,
         id,
         author,
         state,
-        end,
       }: ProposalType) => {
         return selected === selectedType.offChain
           ? [
