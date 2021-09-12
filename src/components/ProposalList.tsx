@@ -20,30 +20,36 @@ export default function ProposalList(props: ProposalListPropType) {
     [history]
   );
 
+  const getField = () =>
+    selected === selectedType.offChain
+      ? ["Title", "Arthur", "State", "End Date"]
+      : ["Title", "Current YesVote", "ProposalState"];
+
   return (
     <DataView
-      fields={["Title", "currentYesVote", "status", "ProposalState", ""]}
+      fields={getField()}
       entries={proposalList}
       renderEntry={({
         title,
         againstVotes,
         forVotes,
         proposalState,
-        status,
         ipfsHash,
         id,
+        author,
+        state,
+        end,
       }: ProposalType) => {
         return selected === selectedType.offChain
           ? [
               <Button label={title} onClick={() => goToDetail(ipfsHash)} />,
-              <div>{forVotes}</div>,
-              <div>{status}</div>,
-              <div>{ProposalState[proposalState]}</div>,
+              <div>{author}</div>,
+              <div>{state}</div>,
+              <div>{end}</div>,
             ]
           : [
               <Button label={title} onClick={() => goToDetail(id)} />,
               <div>{forVotes}</div>,
-              <div>{status}</div>,
               <div>{ProposalState[proposalState]}</div>,
             ];
       }}

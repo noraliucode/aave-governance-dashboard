@@ -124,3 +124,34 @@ const fetchProposal = async (id: string | number) => {
   let proposal: ProposalType = JSON.parse(proposalString);
   return { ...proposal, ...data };
 };
+
+export const fetchOffChainProposal = async (id: string) => {
+  const q = gql`
+  query {
+    proposal(id:${id}) {
+      id
+      title
+      body
+      choices
+      start
+      end
+      snapshot
+      state
+      author
+      created
+      plugins
+      network
+      strategies {
+        name
+        params
+      }
+      space {
+        id
+        name
+      }
+    }
+  }
+  `;
+  const offChainData = await request("https://hub.snapshot.org/graphql", q);
+  return offChainData;
+};
