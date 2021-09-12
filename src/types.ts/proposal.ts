@@ -5,6 +5,7 @@ export enum selectedType {
 
 export type ProposalListPropType = {
   selected: number;
+  proposalList: ProposalType[];
 };
 
 export type ProposalType = {
