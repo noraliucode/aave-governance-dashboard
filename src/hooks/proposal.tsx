@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import GovernanceV2Helper_ABI from "../constants/abi/GovernanceV2Helper_ABI";
 import { aaveGovernanceV2, governanceV2Helper } from "../constants/contracts";
-import { ProposalType } from "../types.ts";
+import { ProposalType, selectedType } from "../types.ts";
 import { get, parseIpfsHash } from "../utils";
 import { gql, request } from "graphql-request";
 
-export const useOnChain = () => {
-  const [onChainData, setOnChainData] = useState<any[]>([]);
-  const [offChainData, setOffChainData] = useState<any[]>([]);
+export const useProposalList = (selected: number) => {
+  const [onChainData, setOnChainData] = useState<ProposalType[]>([]);
+  const [offChainData, setOffChainData] = useState<ProposalType[]>([]);
 
   useEffect(() => {
     const _fetchData = async () => {
@@ -22,7 +22,7 @@ export const useOnChain = () => {
 
   console.log("on-chain data", onChainData);
 
-  return { onChainData, offChainData };
+  return selected === selectedType.offChain ? offChainData : onChainData;
 };
 
 const fetchOnChainData = async () => {

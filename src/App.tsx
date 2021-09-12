@@ -5,9 +5,12 @@ import ProposalDetail from "./components/ProposalDetail";
 import ProposalList from "./components/ProposalList";
 // @ts-ignore
 import { Main, Layout, Header, Tabs } from "@aragon/ui";
+import { useProposalList } from "./hooks";
 
 function App() {
   const [selected, setSelected] = useState(0);
+  const [id, setId] = useState(0);
+  const proposalList = useProposalList(selected);
 
   return (
     <Router>
@@ -27,7 +30,7 @@ function App() {
           </Route>
           <Route path="/">
             <Layout>
-              <ProposalList selected={selected} />
+              <ProposalList proposalList={proposalList} selected={selected} />
             </Layout>
           </Route>
         </Switch>

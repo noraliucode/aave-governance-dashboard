@@ -8,12 +8,10 @@ import {
   selectedType,
   ProposalState,
 } from "../types.ts";
-import { useOnChain } from "../hooks";
 
 export default function ProposalList(props: ProposalPropType) {
-  const { selected } = props;
+  const { selected, proposalList } = props;
   const history = useHistory();
-  const { onChainData, offChainData } = useOnChain();
 
   const goToDetail = useCallback(
     (ipfsHash: string) => {
@@ -25,7 +23,7 @@ export default function ProposalList(props: ProposalPropType) {
   return (
     <DataView
       fields={["Title", "currentYesVote", "status", "ProposalState", ""]}
-      entries={selected === selectedType.offChain ? offChainData : onChainData}
+      entries={proposalList}
       renderEntry={({
         title,
         againstVotes,
@@ -34,12 +32,19 @@ export default function ProposalList(props: ProposalPropType) {
         status,
         ipfsHash,
       }: ProposalType) => {
-        return [
-          <Button label={title} onClick={() => goToDetail(ipfsHash)} />,
-          <div>{forVotes}</div>,
-          <div>{status}</div>,
-          <div>{ProposalState[proposalState]}</div>,
-        ];
+        return selected === selectedType.offChain
+          ? [
+              <Button label={title} onClick={() => goToDetail(ipfsHash)} />,
+              <div>{forVotes}</div>,
+              <div>{status}</div>,
+              <div>{ProposalState[proposalState]}</div>,
+            ]
+          : [
+              <Button label={title} onClick={() => goToDetail(ipfsHash)} />,
+              <div>{forVotes}</div>,
+              <div>{status}</div>,
+              <div>{ProposalState[proposalState]}</div>,
+            ];
       }}
     />
   );
