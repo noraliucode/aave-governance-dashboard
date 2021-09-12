@@ -70,7 +70,7 @@ const fetchOnChainData = async () => {
     const cid = parseIpfsHash(data[i].ipfsHash);
     let proposalString = await get(cid);
     let proposal: ProposalType = JSON.parse(proposalString);
-    array.push({
+    array.unshift({
       ...proposal,
       forVotes: data[i].forVotes.toString(),
       againstVotes: data[i].againstVotes,
