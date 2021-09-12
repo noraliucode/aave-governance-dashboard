@@ -3,9 +3,8 @@ export enum selectedType {
   onChain,
 }
 
-export type ProposalPropType = {
+export type ProposalListPropType = {
   selected: number;
-  proposalList: ProposalType[];
 };
 
 export type ProposalType = {
@@ -16,6 +15,8 @@ export type ProposalType = {
   basename: string;
   status: string;
   ipfsHash: string;
+  id: number;
+  description: string;
 };
 
 export enum ProposalState {

@@ -6,6 +6,22 @@ import { ProposalType, selectedType } from "../types.ts";
 import { get, parseIpfsHash } from "../utils";
 import { gql, request } from "graphql-request";
 
+// Use the mainnet
+const network = "homestead";
+
+// Specify your own API keys
+// Each is optional, and if you omit it the default
+// API key for that service will be used.
+const provider = ethers.getDefaultProvider(network, {
+  infura: "83b98a98c5ca4761ac26ad2e8210df97",
+});
+
+const governanceV2HelperContract = new ethers.Contract(
+  governanceV2Helper,
+  GovernanceV2Helper_ABI,
+  provider
+);
+
 export const useProposalList = (selected: number) => {
   const [onChainData, setOnChainData] = useState<ProposalType[]>([]);
   const [offChainData, setOffChainData] = useState<ProposalType[]>([]);
@@ -25,23 +41,23 @@ export const useProposalList = (selected: number) => {
   return selected === selectedType.offChain ? offChainData : onChainData;
 };
 
+export const useProposal = (id: string | number) => {
+  const [data, setData] = useState<ProposalType>({} as any);
+
+  useEffect(() => {
+    const _fetchData = async () => {
+      const proposal = await fetchProposal(id);
+      setData(proposal);
+    };
+    _fetchData();
+  }, []);
+
+  console.log("on-chain data", data);
+
+  return data;
+};
+
 const fetchOnChainData = async () => {
-  // Use the mainnet
-  const network = "homestead";
-
-  // Specify your own API keys
-  // Each is optional, and if you omit it the default
-  // API key for that service will be used.
-  const provider = ethers.getDefaultProvider(network, {
-    infura: "83b98a98c5ca4761ac26ad2e8210df97",
-  });
-
-  const governanceV2HelperContract = new ethers.Contract(
-    governanceV2Helper,
-    GovernanceV2Helper_ABI,
-    provider
-  );
-
   const data = await governanceV2HelperContract.getProposals(
     "0",
     "0xFFFFFFFF",
@@ -49,18 +65,19 @@ const fetchOnChainData = async () => {
   );
 
   const array = [] as any;
-  for (let item of data) {
-    const cid = parseIpfsHash(item.ipfsHash);
+  for (let i = 0; i < data.length; i++) {
+    const cid = parseIpfsHash(data[i].ipfsHash);
     console.log("cid :", cid);
     let proposalString = await get(cid);
     let proposal: ProposalType = JSON.parse(proposalString);
-    array.unshift({
+    array.push({
       ...proposal,
-      forVotes: item.forVotes.toString(),
-      againstVotes: item.againstVotes,
-      proposalState: item.proposalState,
+      forVotes: data[i].forVotes.toString(),
+      againstVotes: data[i].againstVotes,
+      proposalState: data[i].proposalState,
       title: `${proposal.basename}: ${proposal.title}`,
-      ipfsHash: item.ipfsHash,
+      ipfsHash: data[i].ipfsHash,
+      id: i,
     });
   }
   return array;
@@ -94,4 +111,16 @@ export const fetchOffChainData = async () => {
   `;
   const offChainData = await request("https://hub.snapshot.org/graphql", q);
   return offChainData;
+};
+
+const fetchProposal = async (id: string | number) => {
+  const data = await governanceV2HelperContract.getProposal(
+    id,
+    aaveGovernanceV2
+  );
+
+  const cid = parseIpfsHash(data.ipfsHash);
+  let proposalString = await get(cid);
+  let proposal: ProposalType = JSON.parse(proposalString);
+  return { ...proposal, ...data };
 };
