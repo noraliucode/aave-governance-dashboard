@@ -24,7 +24,7 @@ export default function ProposalList(props: ProposalListPropType) {
   const getField = () =>
     selected === selectedType.offChain
       ? ["Title", "Arthur", "State"]
-      : ["Title", "Current YesVote", "ProposalState"];
+      : ["Title", "Current YesVote", "Against Votes", "ProposalState"];
 
   return (
     <DataView
@@ -46,6 +46,7 @@ export default function ProposalList(props: ProposalListPropType) {
         id,
         author,
         state,
+        againstVotes,
       }: ProposalType) => {
         return selected === selectedType.offChain
           ? [
@@ -55,7 +56,10 @@ export default function ProposalList(props: ProposalListPropType) {
             ]
           : [
               <Button label={title} onClick={() => goToDetail(id)} />,
-              <div>{new BigNumber(forVotes).shiftedBy(-18).toFixed(2)}</div>,
+              <div>{new BigNumber(forVotes).shiftedBy(-18).toFormat(2)}</div>,
+              <div>
+                {new BigNumber(againstVotes).shiftedBy(-18).toFormat(2)}
+              </div>,
               <div>{ProposalState[proposalState]}</div>,
             ];
       }}
