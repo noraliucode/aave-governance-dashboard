@@ -65,24 +65,40 @@ const fetchOnChainData = async () => {
     aaveGovernanceV2
   );
 
+  const promiseArray = [] as any;
   const array = [] as any;
   for (let i = 0; i < data.length; i++) {
     const cid = parseIpfsHash(data[i].ipfsHash);
-    let proposalString = await get(cid);
-    let proposal: ProposalType = JSON.parse(proposalString);
-    array.unshift({
-      ...proposal,
+
+    promiseArray.push(
+      new Promise((resolve, reject) => {
+        resolve(get(cid));
+      })
+    );
+
+    array.push({
       forVotes: data[i].forVotes.toString(),
       againstVotes: data[i].againstVotes,
       proposalState: data[i].proposalState,
-      title: proposal.basename
-        ? `${proposal.basename}: ${proposal.title}`
-        : proposal.title,
       ipfsHash: data[i].ipfsHash,
       id: i,
     });
   }
-  return array;
+
+  return Promise.all(promiseArray).then((result) => {
+    for (let i = 0; i < array.length; i++) {
+      let proposal: ProposalType = JSON.parse(result[i] as string);
+      console.log("proposal!!", result[i]);
+      array[i] = {
+        ...array[i],
+        ...proposal,
+        title: proposal.basename
+          ? `${proposal.basename}: ${proposal.title}`
+          : proposal.title,
+      };
+    }
+    return array.reverse();
+  });
 };
 
 export const fetchOffChainData = async () => {
