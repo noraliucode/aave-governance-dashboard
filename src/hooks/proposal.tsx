@@ -88,7 +88,6 @@ const fetchOnChainData = async () => {
   return Promise.all(promiseArray).then((result) => {
     for (let i = 0; i < array.length; i++) {
       let proposal: ProposalType = JSON.parse(result[i] as string);
-      console.log("proposal!!", result[i]);
       array[i] = {
         ...array[i],
         ...proposal,
