@@ -30,4 +30,4 @@ npm install && npm start
 
 ## Screenshot
 
-![Imgur](https://i.imgur.com/WbXbqmG.png)
+![Imgur](https://i.imgur.com/CUM9Pcp.png)
