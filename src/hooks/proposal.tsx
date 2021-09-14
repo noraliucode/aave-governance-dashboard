@@ -81,7 +81,7 @@ const fetchOnChainData = async () => {
       againstVotes: data[i].againstVotes.toString(),
       proposalState: data[i].proposalState,
       ipfsHash: data[i].ipfsHash,
-      id: i,
+      id: data[i].id,
     });
   }
 
